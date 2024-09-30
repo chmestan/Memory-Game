@@ -13,8 +13,8 @@ public class CardsBehavior : MonoBehaviour
     private Sprite back;
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+    private bool faceUp;
 
-    private bool faceUp = false;
 
     void Start()
     {
@@ -26,13 +26,39 @@ public class CardsBehavior : MonoBehaviour
     private void Flip()
     {
         if(faceUp) spriteRenderer.sprite=back;
-        else spriteRenderer.sprite = face;
-        faceUp = !faceUp;
+        else 
+        {
+            spriteRenderer.sprite=face;
+        }
+
+        faceUp=!faceUp;
+    }
+
+    private void FlipAction()
+    {
+        animator.SetTrigger("flip");
+        animator.SetBool("mouse",false);
+        manager.CardHasBeenFlipped(this);
+    }
+
+
+    public void FlipBackAction()
+    {
+         animator.SetTrigger("flipback");
     }
 
     private void OnMouseDown()
     {
-        animator.SetTrigger("flip");
+        FlipAction();
+    }
+    void OnMouseEnter()
+    {
+        if (!faceUp) animator.SetBool("mouse",true);
+        else animator.SetBool("mouse",false);
+    }
+    void OnMouseExit()
+    {
+        animator.SetBool("mouse",false);
     }
 
 }

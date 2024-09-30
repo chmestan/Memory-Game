@@ -12,6 +12,7 @@ public class CardsManager : MonoBehaviour
 
     [SerializeField] Sprite[] possibleFaces;
     private List<CardsBehavior> cards = new();
+    private List<CardsBehavior> cardsFlipped = new();
     private int countCard {
         get {return (int)(gameSize.x*gameSize.y);}
     }
@@ -105,6 +106,21 @@ public class CardsManager : MonoBehaviour
     {
         cardBehavior.faceId = faceId;
         cardBehavior.face = possibleFaces[faceId];
+    }
+
+    public void CardHasBeenFlipped(CardsBehavior card)
+    {
+        cardsFlipped.Add(card);
+        if (cardsFlipped.Count > 1) 
+        {
+            if (cardsFlipped[0].faceId != cardsFlipped[1].faceId)
+            {
+                cardsFlipped[0].FlipBackAction();
+                cardsFlipped[1].FlipBackAction();
+            }
+            cardsFlipped.Clear();
+            Debug.Log(cardsFlipped.Count);
+        }
     }
 
     void Update()
