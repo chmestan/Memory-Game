@@ -224,6 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2006549025}
   - component: {fileID: 2006549024}
+  - component: {fileID: 2006549026}
   m_Layer: 0
   m_Name: CardManager
   m_TagString: Untagged
@@ -243,10 +244,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 055b8426f5dff3247866186bc7808b4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSize: {x: 4, y: 4}
+  gameSize: {x: 2, y: 2}
   gapX: 0.1
   gapY: 0.1
   prefab: {fileID: 2983610568912134499, guid: ae66e881efceb7e488241736f6bb99d0, type: 3}
+  whenPlayerWins:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2006549026}
+        m_TargetAssemblyTypeName: ChangeScene, Assembly-CSharp
+        m_MethodName: Change
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: WinScene
+          m_BoolArgument: 0
+        m_CallState: 2
   possibleFaces:
   - {fileID: 1846670311, guid: d98337d24574b034c9f181ebb85f15fa, type: 3}
   - {fileID: 1357614517, guid: d98337d24574b034c9f181ebb85f15fa, type: 3}
@@ -285,6 +301,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2006549026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006549023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94e2f6ef679959c4a96cec7f11966d30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
