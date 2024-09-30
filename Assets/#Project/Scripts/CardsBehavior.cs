@@ -16,6 +16,7 @@ public class CardsBehavior : MonoBehaviour
     private bool faceUp;
 
 
+
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -59,6 +60,16 @@ public class CardsBehavior : MonoBehaviour
     void OnMouseExit()
     {
         animator.SetBool("mouse",false);
+    }
+
+    void HasFinishedFlipping()
+    {
+
+    }
+
+    void Update()
+    {
+        manager.CheckCards(animator);
     }
 
 }

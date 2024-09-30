@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Events;
+
 
 public class CardsManager : MonoBehaviour
 {
@@ -9,10 +11,12 @@ public class CardsManager : MonoBehaviour
     [SerializeField] float gapX = 0.5f;
     [SerializeField] float gapY = 0.5f;
     [SerializeField] GameObject prefab;
+    [SerializeField] private UnityEvent whenPlayerWins;
 
     [SerializeField] Sprite[] possibleFaces;
     private List<CardsBehavior> cards = new();
     private List<CardsBehavior> cardsFlipped = new();
+    private List<CardsBehavior> cardsCorrect = new();
     private int countCard {
         get {return (int)(gameSize.x*gameSize.y);}
     }
@@ -110,21 +114,36 @@ public class CardsManager : MonoBehaviour
 
     public void CardHasBeenFlipped(CardsBehavior card)
     {
-        cardsFlipped.Add(card);
+        if (!cardsFlipped.Contains(card)) cardsFlipped.Add(card);
         if (cardsFlipped.Count > 1) 
         {
             if (cardsFlipped[0].faceId != cardsFlipped[1].faceId)
             {
-                cardsFlipped[0].FlipBackAction();
                 cardsFlipped[1].FlipBackAction();
+                cardsFlipped[0].FlipBackAction();
+            }
+            else
+            {
+                cardsCorrect.Add(cardsFlipped[0]);
+                cardsCorrect.Add(cardsFlipped[1]);
             }
             cardsFlipped.Clear();
             Debug.Log(cardsFlipped.Count);
+        }
+
+    }
+
+    public void CheckCards(Animator animator)
+    {
+        if (cardsCorrect.Count == cards.Count)
+        {
+            whenPlayerWins.Invoke();
+            animator.SetBool("win", true);
         }
     }
 
     void Update()
     {
-        
+
     }
 }
