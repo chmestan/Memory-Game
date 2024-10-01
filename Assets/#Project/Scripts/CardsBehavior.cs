@@ -45,7 +45,8 @@ public class CardsBehavior : MonoBehaviour
 
     public void FlipBackAction()
     {
-         animator.SetTrigger("flipback");
+        animator.SetTrigger("flipback");
+
     }
 
     private void OnMouseDown()

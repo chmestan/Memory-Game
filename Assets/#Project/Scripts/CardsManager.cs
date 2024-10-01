@@ -7,34 +7,37 @@ using UnityEngine.Events;
 
 public class CardsManager : MonoBehaviour
 {
+    [Header ("Game Size")]
     [SerializeField] Vector2 gameSize = Vector2.one*4;
     [SerializeField] float gapX = 0.5f;
     [SerializeField] float gapY = 0.5f;
+
+    [Header ("Cards")]
     [SerializeField] GameObject prefab;
+    [SerializeField] Sprite[] possibleFaces;
+
+    [Header ("Win Event")]
     [SerializeField] private UnityEvent whenPlayerWins;
 
-    [SerializeField] Sprite[] possibleFaces;
     private List<CardsBehavior> cards = new();
-    private List<CardsBehavior> cardsFlipped = new();
+    public List<CardsBehavior> cardsFlipped = new();
     private List<CardsBehavior> cardsCorrect = new();
+
+
     private int countCard {
         get {return (int)(gameSize.x*gameSize.y);}
     }
 
     void Start()
     {
-
-        
         if (countCard %2 != 0) 
         {
-            Debug.LogError("You need to have an even number of cards");
-            return;
+            Debug.LogError("You need to have an even number of cards"); return;
         }
 
         if (countCard /2 > possibleFaces.Length) 
         {
-            Debug.LogError($"You can't have more cards than {possibleFaces.Length*2}");
-            return;
+            Debug.LogError($"You can't have more cards than {possibleFaces.Length*2}"); return;
         }
         
         Initialize();
@@ -45,7 +48,7 @@ public class CardsManager : MonoBehaviour
 
         int nbFaces = countCard /2; 
         List<int> faces = new();
-        for(int _=0; _<nbFaces; _++) // underscore pour dire que c'est juste un compteur
+        for(int _=0; _<nbFaces; _++) 
         {
             int face = Random.Range(0, possibleFaces.Length);
             while (faces.Contains(face))
@@ -60,7 +63,7 @@ public class CardsManager : MonoBehaviour
         {
             for (int y=0; y<gameSize.y; y++)
             {
-                int index = Random.Range(0,faces.Count); //Count pour listes, Length pour tableaux
+                int index = Random.Range(0,faces.Count); 
                 InstantiateCard(x,y,faces[index]);
                 faces.RemoveAt(index);
             }
@@ -71,6 +74,8 @@ public class CardsManager : MonoBehaviour
     {
         GameObject card = Instantiate(prefab);
 
+        
+
         if (card.TryGetComponent(out CardsBehavior cardsBehavior))
         {
             cards.Add(cardsBehavior);
@@ -79,30 +84,31 @@ public class CardsManager : MonoBehaviour
         }
         else 
         {
-            Debug.LogError($"Prefab {prefab.name} does not have a Card Behavior script");
-            return;
+            Debug.LogError($"Prefab {prefab.name} does not have a Card Behavior script"); return;
         }
 
         if(card.TryGetComponent(out Collider2D collider))
         {
             Vector3 cardSize = collider.bounds.size;
-            float cardX = x * (gapX + cardSize.x); //position en X 
-            float cardY = y * (gapY + cardSize.y); //position en Y 
+
+            // Get horizontal & vertical size for centering
+            float totalGridWidth = (gameSize.x - 1) * (gapX + cardSize.x);
+            float totalGridHeight = (gameSize.y - 1) * (gapY + cardSize.y);
+            // cardSize needs to be taken off once because from the first card to the last we take back one unit
+            // due to the pivot being at the center 
+            // so for X for example, we need to take away the left half of the first card and the right half of the last
+
+            float cardX = x * (gapX + cardSize.x) - totalGridWidth / 2;
+            float cardY = y * (gapY + cardSize.y) - totalGridHeight / 2; 
 
             Vector3 position = new(cardX,cardY,0);
-            // position += transform.position ; //on repositionne par rapport au Card Manager
-            // card.transform.position = position;
-
-            // est équivalent à
-            card.transform.parent= transform; // = transform du Card Manager
-            //card.transform.SetParent(transform) veut dire pareil
+            card.transform.parent= transform; 
             card.transform.localPosition = position;
 
         }
         else 
         {
-            Debug.LogError($"Prefab {prefab.name} does not have a Collider2D");
-            return;
+            Debug.LogError($"Prefab {prefab.name} does not have a Collider2D"); return;
         }
     }
 
