@@ -14,36 +14,40 @@ public class CardsBehavior : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator animator;
     private bool faceUp;
-
-
-
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         back = spriteRenderer.sprite;
     }
-
-    private void Flip()
-    {
-        if(faceUp) spriteRenderer.sprite=back;
-        else 
-        {
-            spriteRenderer.sprite=face;
-        }
-
-        faceUp=!faceUp;
-    }
-
-    private void FlipAction()
+    
+    private void StartFlip() // starts anim
     {
         animator.SetTrigger("flip");
         animator.SetBool("mouse",false);
-        manager.CardHasBeenFlipped(this);
     }
 
 
-    public void FlipBackAction()
+    private void Flip() // mid anim -- change sprite
+    {
+        if(faceUp) spriteRenderer.sprite=back;
+        else  spriteRenderer.sprite=face;  
+    }
+
+    private void FlipDone() // end anim 
+    {
+        faceUp=!faceUp;
+        if (faceUp) manager.CardHasBeenFlipped(this);
+        else if (!faceUp && manager.cardsFlipped.Count > 1 && this == manager.cardsFlipped[1])
+        {
+            manager.cardsFlipped.Clear();
+            Debug.Log(manager.cardsFlipped.Count);
+        }
+    }
+
+
+
+    public void FlipBack()
     {
         animator.SetTrigger("flipback");
 
@@ -51,7 +55,7 @@ public class CardsBehavior : MonoBehaviour
 
     private void OnMouseDown()
     {
-        FlipAction();
+        if (manager.cardsFlipped.Count < 2) StartFlip();
     }
     void OnMouseEnter()
     {
@@ -61,11 +65,6 @@ public class CardsBehavior : MonoBehaviour
     void OnMouseExit()
     {
         animator.SetBool("mouse",false);
-    }
-
-    void HasFinishedFlipping()
-    {
-
     }
 
     void Update()

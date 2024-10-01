@@ -121,20 +121,20 @@ public class CardsManager : MonoBehaviour
     public void CardHasBeenFlipped(CardsBehavior card)
     {
         if (!cardsFlipped.Contains(card)) cardsFlipped.Add(card);
+
         if (cardsFlipped.Count > 1) 
         {
             if (cardsFlipped[0].faceId != cardsFlipped[1].faceId)
             {
-                cardsFlipped[1].FlipBackAction();
-                cardsFlipped[0].FlipBackAction();
+                cardsFlipped[0].FlipBack();
+                cardsFlipped[1].FlipBack();
             }
             else
             {
                 cardsCorrect.Add(cardsFlipped[0]);
                 cardsCorrect.Add(cardsFlipped[1]);
+                cardsFlipped.Clear();
             }
-            cardsFlipped.Clear();
-            Debug.Log(cardsFlipped.Count);
         }
 
     }
