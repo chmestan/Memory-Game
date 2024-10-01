@@ -37,6 +37,7 @@ public class CardsBehavior : MonoBehaviour
     private void FlipDone() // end anim 
     {
         faceUp=!faceUp;
+        animator.SetBool("faceUp", !animator.GetBool("faceUp"));
         if (faceUp) manager.CardHasBeenFlipped(this);
         else if (!faceUp && manager.cardsFlipped.Count > 1 && this == manager.cardsFlipped[1])
         {
