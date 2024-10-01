@@ -12,7 +12,7 @@ public class CardsBehavior : MonoBehaviour
     internal int faceId;
     private Sprite back;
     private SpriteRenderer spriteRenderer;
-    private Animator animator;
+    public Animator animator;
     private bool faceUp;
     void Start()
     {
@@ -25,6 +25,7 @@ public class CardsBehavior : MonoBehaviour
     {
         animator.SetTrigger("flip");
         animator.SetBool("mouse",false);
+        if (!manager.cardsFlipped.Contains(this)) manager.cardsFlipped.Add(this);
     }
 
 
@@ -48,11 +49,11 @@ public class CardsBehavior : MonoBehaviour
 
 
 
-    public void FlipBack()
-    {
-        animator.SetTrigger("flipback");
+    // public void FlipBack()
+    // {
+    //     animator.SetTrigger("flipback");
 
-    }
+    // }
 
     private void OnMouseDown()
     {

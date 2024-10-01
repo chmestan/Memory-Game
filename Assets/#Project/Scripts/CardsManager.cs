@@ -23,7 +23,6 @@ public class CardsManager : MonoBehaviour
     public List<CardsBehavior> cardsFlipped = new();
     private List<CardsBehavior> cardsCorrect = new();
 
-
     private int countCard {
         get {return (int)(gameSize.x*gameSize.y);}
     }
@@ -120,14 +119,14 @@ public class CardsManager : MonoBehaviour
 
     public void CardHasBeenFlipped(CardsBehavior card)
     {
-        if (!cardsFlipped.Contains(card)) cardsFlipped.Add(card);
-
         if (cardsFlipped.Count > 1) 
         {
             if (cardsFlipped[0].faceId != cardsFlipped[1].faceId)
             {
-                cardsFlipped[0].FlipBack();
-                cardsFlipped[1].FlipBack();
+                cardsFlipped[0].animator.Play("Wait",0,0f);
+                cardsFlipped[1].animator.Play("Wait",0,0f);
+                // cardsFlipped[0].FlipBack();
+                // cardsFlipped[1].FlipBack();
             }
             else
             {
@@ -147,6 +146,7 @@ public class CardsManager : MonoBehaviour
             animator.SetBool("win", true);
         }
     }
+
 
     void Update()
     {
